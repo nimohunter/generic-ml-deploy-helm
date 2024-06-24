@@ -1,0 +1,10 @@
+# values for dev 
+# write here value will override the default values.yaml
+
+image:
+  tag: "dev"
+
+enableProbes: false
+
+# use for helm case test
+testResponse: "Hello, World From Dev Env"

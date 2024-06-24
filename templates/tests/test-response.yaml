@@ -1,0 +1,22 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: "{{ .Release.Name }}-test-response"
+  labels:
+    {{- include "generic-ml-deploy-helm.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test
+spec:
+  template:
+    spec:
+      containers:
+      - name: curl
+        image: curlimages/curl
+        command: ["/bin/sh", "-c"]
+        args:
+        - |
+          response=$(curl -s http://{{ include "generic-ml-deploy-helm.fullname" . }}:{{ .Values.service.port }})
+          echo $response
+          echo $response | grep -q "{{ .Values.testResponse }}"
+      restartPolicy: Never
+  backoffLimit: 1
